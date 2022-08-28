@@ -78,6 +78,9 @@ func TestValidCommandLineToArgsConversion(t *testing.T) {
 		{[]string{"-r", "1"}, func(args SQLCmdArguments) bool {
 			return args.ErrorsToStderr == 1
 		}},
+		{[]string{"-y", "1024", "-Y", "512"}, func(args SQLCmdArguments) bool {
+			return args.MaxVarTypeWidth == 1024 && args.MaxFixedTypeWidth == 512
+		}},
 		{[]string{"-h", "2", "-?"}, func(args SQLCmdArguments) bool {
 			return args.Help && args.Headers == 2
 		}},

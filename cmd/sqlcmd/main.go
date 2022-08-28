@@ -51,6 +51,8 @@ type SQLCmdArguments struct {
 	ErrorsToStderr              int               `short:"r" help:"Redirects the error message output to the screen (stderr). A value of 0 means messages with severity >= 11 will b redirected. A value of 1 means all error message output including PRINT is redirected." enum:"-1,0,1" default:"-1"`
 	Headers                     int               `short:"h" help:"Specifies the number of rows to print between the column headings. Use -h-1 to specify that headers not be printed."`
 	UnicodeOutputFile           bool              `short:"u" help:"Specifies that all output files are encoded with little-endian Unicode"`
+	MaxVarTypeWidth             int               `short:"y" help:"Sets the sqlcmd scripting variable SQLCMDMAXVARTYPEWIDTH. The default is 256."`
+	MaxFixedTypeWidth           int               `short:"Y" help:"Sets the sqlcmd scripting variable SQLCMDMAXFIXEDTYPEWIDTH. The default is 0 (unlimited)."`
 	// Keep Help at the end of the list
 	Help bool `short:"?" help:"Show syntax summary."`
 }
@@ -152,8 +154,8 @@ func setVars(vars *sqlcmd.Variables, args *SQLCmdArguments) {
 		sqlcmd.SQLCMDHEADERS:           func(a *SQLCmdArguments) string { return fmt.Sprint(a.Headers) },
 		sqlcmd.SQLCMDCOLSEP:            func(a *SQLCmdArguments) string { return "" },
 		sqlcmd.SQLCMDCOLWIDTH:          func(a *SQLCmdArguments) string { return "" },
-		sqlcmd.SQLCMDMAXVARTYPEWIDTH:   func(a *SQLCmdArguments) string { return "" },
-		sqlcmd.SQLCMDMAXFIXEDTYPEWIDTH: func(a *SQLCmdArguments) string { return "" },
+		sqlcmd.SQLCMDMAXVARTYPEWIDTH:   func(a *SQLCmdArguments) string { return fmt.Sprint(a.MaxVarTypeWidth) },
+		sqlcmd.SQLCMDMAXFIXEDTYPEWIDTH: func(a *SQLCmdArguments) string { return fmt.Sprint(a.MaxFixedTypeWidth) },
 		sqlcmd.SQLCMDFORMAT:            func(a *SQLCmdArguments) string { return a.Format },
 	}
 	for varname, set := range varmap {
